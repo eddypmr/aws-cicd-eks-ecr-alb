@@ -12,7 +12,7 @@ REQUEST_TIMEOUT = float(os.getenv("CHECK_TIMEOUT_SECONDS","3.0"))
 
 @app.get("/health")
 def health():
-    return {status: "OK"}
+    return {"status": "ok"}
 
 @app.post("/services", response_model=ServiceOut)
 def create_service(payload: ServiceCreate):
