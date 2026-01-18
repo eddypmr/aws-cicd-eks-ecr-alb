@@ -31,7 +31,7 @@ def create_service(payload: ServiceCreate):
 
 @app.get("/services", response_model=list[ServiceOut])
 def get_services():
-    returndb.list_services()
+    return db.list_services()
 
 @app.get("/status", response_model=list[StatusOut])
 async def run_checks():
