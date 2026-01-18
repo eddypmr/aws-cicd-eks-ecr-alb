@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+export AWS_REGION="${AWS_REGION:-eu-west-1}";
+export AWS_ACCOUNT_ID="${AWS_ACCOUNT_ID:-151580225166}";
+export ECR_REPO="${ECR_REPO:-aws-cicd-eks-ecr-alb}";
+export GH_REPO="eddypmr/aws-cicd-eks-ecr-alb";
+export ROLE_NAME="GithubActions-ECR-Push-Project4";
+export CLUSTER_NAME="${CLUSTER_NAME:-project4-eks}";
+export K8S_NAMESPACE="${K8S_NAMESPACE:-dev}";
+export APP_SA_NAME="${APP_SA_NAME:-health-aggregator-sa}";
+export APP_NAME="${APP_NAME:-health-aggregator}";
+export IMAGE_URI="${IMAGE_URI:-$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest}";
