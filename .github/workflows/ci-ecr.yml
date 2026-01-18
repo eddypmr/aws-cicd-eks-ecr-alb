@@ -1,0 +1,48 @@
+name: CI - Build & Push to ECR
+
+on:
+    push:
+        branches: ["main"]
+
+permissions:
+    id-token: write
+    contents: read
+
+env:
+    AWS_REGION: eu-west-1
+    AWS_ACCOUNT_ID: 151580225166
+    ECR_REPO: aws-cicd-eks-ecr-alb
+
+jobs:
+    build_push:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+        
+            - name: Configure AWS Credentials (OIDC)
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: arn:aws:iam::151580225166:role/GithubActions-ECR-Push-Project4
+                aws-region: ${{ env.AWS_REGION }}
+            
+            - name: Login to Amazon ECR
+              uses: aws-actions/amazon-ecr-login@v2
+            
+            - name: Build, Tag and push image
+              env:
+                IMAGE_URI: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}
+                SHA_TAG: ${{ github.sha }}
+              run: |
+                build -t $ECR_REPO:latest -f docker/Dockerfile .
+                docker tag $ECR_REPO:latest $IMAGE_URI:latest
+                docker tag $ECR_REPO:latest $IMAGE_URI:$SHA_TAG
+                docker push $IMAGE_URI:latest
+                docker push $IMAGE_URI:$SHA_TAG    
+            
+            - name: Show tags pushed
+              run: |
+                aws ecr describe-images \
+                    --repository-name ${{ env.ECR_REPO }} \
+                    --region ${{ env.AWS_REGION }} \
+                    --query "imageDetails[0].imageTags"
