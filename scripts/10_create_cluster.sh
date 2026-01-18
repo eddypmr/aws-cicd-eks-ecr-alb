@@ -6,5 +6,5 @@ eksctl create cluster \
   --name "$CLUSTER_NAME" \
   --region "$AWS_REGION" \
   --nodes 2 \
-  --nodes-type t3.micro \
+  --node-type t3.small \
   --managed

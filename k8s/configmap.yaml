@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: health-aggregator-ConfigMap
+  name: health-aggregator-configmap
   namespace: dev
 data:
   AWS_REGION: "eu-west-1"
   AWS_DEFAULT_REGION: "eu-west-1"
-  DDB_TABLE_REGISTRY: "service-registry"
-  DDB_TABLE_STATUS: "service-status"
+  DDB_TABLE_REGISTRY: "service_registry"
+  DDB_TABLE_STATUS: "service_status"
   CHECK_TIMEOUT_SECONDS: "3.0"

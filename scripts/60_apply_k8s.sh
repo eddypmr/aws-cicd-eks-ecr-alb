@@ -4,15 +4,11 @@ source scripts/00_env.sh
 
 # asegurar namespace/config
 kubectl apply -f k8s/namespace.yaml
-kubectl apply -f k8s/configmap.yaml
+kubectl -n "$K8S_NAMESPACE" apply -f k8s/configmap.yaml
+kubectl -n "$K8S_NAMESPACE" apply -f k8s/serviceaccount.yaml
+kubectl -n "$K8S_NAMESPACE" apply -f k8s/deployment.yaml
+kubectl -n "$K8S_NAMESPACE" apply -f k8s/service.yaml
 
-# service placeholder (si luego IRSA lo crea, no pasa nada)
-kubectl apply -f k8s/serviceaccount.yaml
-
-# deploy app
-kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/service.yaml
-
-# verificar deploy
+# 3) verificar
 kubectl -n "$K8S_NAMESPACE" get pods
 kubectl -n "$K8S_NAMESPACE" get svc

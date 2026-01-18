@@ -10,5 +10,5 @@ eksctl create iamserviceaccount \
   --cluster "$CLUSTER_NAME" \
   --attach-policy-arn "$POLICY_ARN" \
   --approve \
-  --region "$AWS_REGION"
+  --region "$AWS_REGION" \
   --override-existing-serviceaccounts
