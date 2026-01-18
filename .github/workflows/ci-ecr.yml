@@ -46,38 +46,38 @@ jobs:
                 aws ecr describe-images \
                     --repository-name ${{ env.ECR_REPO }} \
                     --region ${{ env.AWS_REGION }} \
-                    --query "imageDetails[0].imageTags"
+                    --query "imageDetails[?imageTags!=null].imageTags[]"
 
-deploy:
-    runs-on: ubuntu-latest
-    needs: build_push
-    if: github.event_name == 'workflow_dispatch'
-    env:
-        AWS_REGION: eu-west-1
-        CLUSTER_NAME: project4-eks
-    steps:
-        - name: Checkout
-          uses: actions/checkout@v4
+    deploy:
+        runs-on: ubuntu-latest
+        needs: build_push
+        if: github.event_name == 'workflow_dispatch'
+        env:
+            AWS_REGION: eu-west-1
+            CLUSTER_NAME: project4-eks
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-        - name: Configure AWS Credentials (OIDC) - Deploy
-          uses: aws-actions/configure-aws-credentials@v4
-          with:
-            role-to-assume: arn:aws:iam::151580225166:role/GithubActions-EKS-Deploy-Project4
-            aws-region: ${{ env.AWS_REGION }}
-        
-        - name: Install kubectl
-          uses: azure/setup-kubectl@v3
-          with:
-            version: 'latest'
+            - name: Configure AWS Credentials (OIDC) - Deploy
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: arn:aws:iam::151580225166:role/GithubActions-EKS-Deploy-Project4
+                aws-region: ${{ env.AWS_REGION }}
+            
+            - name: Install kubectl
+              uses: azure/setup-kubectl@v3
+              with:
+                version: 'latest'
 
-        - name: Update kubeconfig
-          run: |
-            aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.CLUSTER_NAME }}
-        
-        - name: Apply manifests
-          run: |
-            kubectl apply -f k8s/namespace.yaml
-            kubectl apply -f k8s/configmap.yaml -n dev
-            kubectl apply -f k8s/deployment.yaml -n dev
-            kubectl apply -f k8s/service.yaml -n dev
-            kubectl apply -f k8s/serviceaccount.yaml -n dev
+            - name: Update kubeconfig
+              run: |
+                aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.CLUSTER_NAME }}
+            
+            - name: Apply manifests
+              run: |
+                kubectl apply -f k8s/namespace.yaml
+                kubectl apply -f k8s/configmap.yaml -n dev
+                kubectl apply -f k8s/deployment.yaml -n dev
+                kubectl apply -f k8s/service.yaml -n dev
+                kubectl apply -f k8s/serviceaccount.yaml -n dev
