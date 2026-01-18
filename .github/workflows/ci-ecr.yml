@@ -34,7 +34,7 @@ jobs:
                 IMAGE_URI: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}
                 SHA_TAG: ${{ github.sha }}
               run: |
-                build -t $ECR_REPO:latest -f docker/Dockerfile .
+                docker build -t $ECR_REPO:latest -f docker/Dockerfile .
                 docker tag $ECR_REPO:latest $IMAGE_URI:latest
                 docker tag $ECR_REPO:latest $IMAGE_URI:$SHA_TAG
                 docker push $IMAGE_URI:latest
