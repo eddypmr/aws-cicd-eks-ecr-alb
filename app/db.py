@@ -3,8 +3,8 @@ import boto3
 from boto3.dynamodb.conditions import Key
 
 AWS_REGION = os.getenv("AWS_REGION", "us-west-1")
-TABLE_REGISTRY = os.getenv("DDB_TABLE_REGISTRY", "service-registry")
-TABLE_STATUS = os.getenv("DDB_TABLE_STATUS", "service-status")
+TABLE_REGISTRY = os.getenv("DDB_TABLE_REGISTRY", "service_registry")
+TABLE_STATUS = os.getenv("DDB_TABLE_STATUS", "service_status")
 
 dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
 registry_tbl = dynamodb.Table(TABLE_REGISTRY)
