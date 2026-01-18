@@ -38,7 +38,7 @@ async def run_checks():
     services = [s for s in db.list_services() if s.get("enabled", True)]
     now = datetime.now(timezone.utc).isoformat()
 
-    async with httpx.AsyncClient(timeout=REQUEST_TIMEOUT, follow_redirects=True) as Client:
+    async with httpx.AsyncClient(timeout=REQUEST_TIMEOUT, follow_redirects=True) as client:
         results = []
         for s in services:
             service_id = s["service_id"]
@@ -78,7 +78,7 @@ async def run_checks():
     
 @app.get("/status/{service_id}/latest", response_model=StatusOut)
 def latest(service_id: str):
-    item = db.get_latest_status("service_id")
+    item = db.get_latest_status(service_id)
     if not item:
         raise HTTPException(status_code=404, detail = "No status found")
     return item
